@@ -1,0 +1,376 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Card Vault — Decrypt</title>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@400;500;600&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+  :root {
+    --bg: #111110;
+    --surface: #1C1C1A;
+    --border: #2E2E2A;
+    --gold: #B8975A;
+    --gold-dim: #7A6440;
+    --text: #EAE6E0;
+    --muted: #6B6860;
+    --success: #4A7C59;
+    --error: #C0392B;
+    --mono: 'Courier New', monospace;
+  }
+
+  body {
+    background: var(--bg);
+    font-family: 'DM Sans', sans-serif;
+    min-height: 100vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 2rem 1rem;
+    color: var(--text);
+  }
+
+  body::before {
+    content: '';
+    position: fixed;
+    inset: 0;
+    background: radial-gradient(ellipse 50% 40% at 50% 0%, rgba(184,151,90,0.06) 0%, transparent 60%);
+    pointer-events: none;
+  }
+
+  .card {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 2px;
+    width: 100%;
+    max-width: 520px;
+    padding: 2.5rem;
+    animation: fadeUp 0.4s ease both;
+  }
+
+  @keyframes fadeUp {
+    from { opacity: 0; transform: translateY(12px); }
+    to   { opacity: 1; transform: translateY(0); }
+  }
+
+  .lockbadge {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    font-size: 0.68rem;
+    font-weight: 500;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: var(--gold);
+    margin-bottom: 1rem;
+  }
+
+  h1 {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 1.7rem;
+    font-weight: 500;
+    color: var(--text);
+    margin-bottom: 0.4rem;
+  }
+
+  .subtitle {
+    font-size: 0.78rem;
+    color: var(--muted);
+    margin-bottom: 2rem;
+    line-height: 1.6;
+  }
+
+  .divider { width: 28px; height: 1px; background: var(--gold-dim); margin-bottom: 2rem; }
+
+  .field { margin-bottom: 1.2rem; }
+
+  label {
+    display: block;
+    font-size: 0.68rem;
+    font-weight: 500;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--muted);
+    margin-bottom: 0.4rem;
+  }
+
+  input[type="text"], input[type="password"], textarea {
+    width: 100%;
+    background: rgba(255,255,255,0.04);
+    border: 1px solid var(--border);
+    border-radius: 1px;
+    padding: 0.75rem 0.9rem;
+    font-family: 'DM Sans', sans-serif;
+    font-size: 0.88rem;
+    color: var(--text);
+    outline: none;
+    transition: border-color 0.2s;
+    -webkit-appearance: none;
+  }
+
+  textarea { resize: vertical; min-height: 100px; font-family: var(--mono); font-size: 0.75rem; }
+
+  input:focus, textarea:focus { border-color: var(--gold-dim); }
+
+  .btn {
+    width: 100%;
+    background: var(--gold);
+    color: #111;
+    border: none;
+    border-radius: 1px;
+    padding: 0.9rem;
+    font-family: 'DM Sans', sans-serif;
+    font-size: 0.78rem;
+    font-weight: 500;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    cursor: pointer;
+    transition: background 0.2s;
+    margin-top: 0.5rem;
+  }
+
+  .btn:hover { background: var(--gold-light, #c9a870); }
+  .btn:disabled { background: var(--gold-dim); cursor: not-allowed; }
+
+  .result {
+    margin-top: 2rem;
+    border: 1px solid var(--border);
+    border-radius: 1px;
+    overflow: hidden;
+    display: none;
+    animation: fadeUp 0.3s ease both;
+  }
+
+  .result.show { display: block; }
+
+  .result-header {
+    background: rgba(184,151,90,0.08);
+    border-bottom: 1px solid var(--border);
+    padding: 0.75rem 1.1rem;
+    font-size: 0.68rem;
+    font-weight: 500;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--gold);
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+  }
+
+  .clear-btn {
+    font-size: 0.65rem;
+    color: var(--muted);
+    cursor: pointer;
+    background: none;
+    border: none;
+    font-family: inherit;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    transition: color 0.2s;
+  }
+
+  .clear-btn:hover { color: var(--error); }
+
+  .result-body { padding: 1.2rem 1.1rem; }
+
+  .row-item {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 0.55rem 0;
+    border-bottom: 1px solid rgba(255,255,255,0.04);
+  }
+
+  .row-item:last-child { border-bottom: none; }
+
+  .row-label {
+    font-size: 0.68rem;
+    font-weight: 500;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: var(--muted);
+    min-width: 110px;
+  }
+
+  .row-value {
+    font-family: var(--mono);
+    font-size: 0.85rem;
+    color: var(--text);
+    text-align: right;
+    word-break: break-all;
+  }
+
+  .copy-icon {
+    cursor: pointer;
+    margin-left: 8px;
+    color: var(--muted);
+    transition: color 0.2s;
+    flex-shrink: 0;
+  }
+
+  .copy-icon:hover { color: var(--gold); }
+
+  .error-msg {
+    margin-top: 1rem;
+    background: rgba(192,57,43,0.1);
+    border: 1px solid rgba(192,57,43,0.3);
+    border-radius: 1px;
+    padding: 0.7rem 1rem;
+    font-size: 0.78rem;
+    color: #e07060;
+    display: none;
+  }
+
+  .error-msg.show { display: block; }
+
+  .warning {
+    background: rgba(184,151,90,0.05);
+    border: 1px solid rgba(184,151,90,0.15);
+    border-radius: 1px;
+    padding: 0.75rem 1rem;
+    font-size: 0.73rem;
+    color: var(--muted);
+    line-height: 1.6;
+    margin-bottom: 1.5rem;
+    display: flex;
+    gap: 0.5rem;
+  }
+
+  @media (max-width: 520px) {
+    .card { padding: 1.8rem 1.4rem; }
+  }
+</style>
+</head>
+<body>
+
+<div class="card">
+  <div class="lockbadge">
+    <svg width="11" height="13" viewBox="0 0 11 13" fill="none">
+      <rect x="1" y="5" width="9" height="7.5" rx="1" stroke="currentColor" stroke-width="1.3"/>
+      <path d="M3 5V3.5a2.5 2.5 0 015 0V5" stroke="currentColor" stroke-width="1.3" stroke-linecap="round"/>
+    </svg>
+    Private — Advisor Only
+  </div>
+
+  <h1>Decrypt Card Details</h1>
+  <p class="subtitle">Paste the encrypted value from the client's sheet, enter their unique token, and decrypt.</p>
+
+  <div class="divider"></div>
+
+  <div class="warning">
+    <svg width="14" height="14" viewBox="0 0 14 14" fill="none" style="flex-shrink:0;margin-top:1px">
+      <path d="M7 1L13 12H1L7 1z" stroke="#B8975A" stroke-width="1.2" stroke-linejoin="round"/>
+      <path d="M7 5.5v3M7 10v.5" stroke="#B8975A" stroke-width="1.2" stroke-linecap="round"/>
+    </svg>
+    Keep this page private. Do not bookmark on shared devices. Clear results when done.
+  </div>
+
+  <div class="field">
+    <label>Client Token (unique per client)</label>
+    <input type="password" id="token" placeholder="e.g. johnsmith-deal-2024">
+  </div>
+
+  <div class="field">
+    <label>Encrypted Data (from Google Sheet)</label>
+    <textarea id="encrypted" placeholder="Paste the encrypted string here..."></textarea>
+  </div>
+
+  <button class="btn" onclick="decrypt()">Decrypt</button>
+
+  <div class="error-msg" id="error-msg">
+    Decryption failed. Check that the token matches and the encrypted data is complete.
+  </div>
+
+  <div class="result" id="result">
+    <div class="result-header">
+      Card Details
+      <button class="clear-btn" onclick="clearResult()">Clear & close</button>
+    </div>
+    <div class="result-body" id="result-body"></div>
+  </div>
+</div>
+
+<script>
+async function deriveKey(password, salt) {
+  const enc = new TextEncoder();
+  const keyMaterial = await crypto.subtle.importKey('raw', enc.encode(password), 'PBKDF2', false, ['deriveKey']);
+  return crypto.subtle.deriveKey(
+    { name: 'PBKDF2', salt, iterations: 310000, hash: 'SHA-256' },
+    keyMaterial,
+    { name: 'AES-GCM', length: 256 },
+    false,
+    ['decrypt']
+  );
+}
+
+async function decryptData(b64, password) {
+  const bytes = Uint8Array.from(atob(b64), c => c.charCodeAt(0));
+  const salt  = bytes.slice(0, 16);
+  const iv    = bytes.slice(16, 28);
+  const ct    = bytes.slice(28);
+  const key   = await deriveKey(password, salt);
+  const plain = await crypto.subtle.decrypt({ name: 'AES-GCM', iv }, key, ct);
+  return new TextDecoder().decode(plain);
+}
+
+async function decrypt() {
+  const token     = document.getElementById('token').value.trim();
+  const encrypted = document.getElementById('encrypted').value.trim();
+  const errEl     = document.getElementById('error-msg');
+  const resultEl  = document.getElementById('result');
+
+  errEl.classList.remove('show');
+  resultEl.classList.remove('show');
+
+  if (!token || !encrypted) {
+    errEl.textContent = 'Please enter both the token and encrypted data.';
+    errEl.classList.add('show');
+    return;
+  }
+
+  try {
+    const json = await decryptData(encrypted, token);
+    const data = JSON.parse(json);
+
+    const fields = [
+      { label: 'Cardholder',    key: 'cardholder' },
+      { label: 'Card Number',   key: 'cardnumber' },
+      { label: 'Expiry',        key: 'expiry' },
+      { label: 'CVV',           key: 'cvv' },
+      { label: 'Billing Addr.', key: 'billing' },
+      { label: 'Submitted',     key: 'submitted' },
+    ];
+
+    const body = document.getElementById('result-body');
+    body.innerHTML = fields.map(f => `
+      <div class="row-item">
+        <span class="row-label">${f.label}</span>
+        <span class="row-value" id="val-${f.key}">${data[f.key] || '—'}</span>
+        <svg class="copy-icon" onclick="copyVal('${f.key}')" width="14" height="14" viewBox="0 0 14 14" fill="none" title="Copy">
+          <rect x="4" y="1" width="9" height="9" rx="1" stroke="currentColor" stroke-width="1.2"/>
+          <path d="M1 5v7a1 1 0 001 1h7" stroke="currentColor" stroke-width="1.2" stroke-linecap="round"/>
+        </svg>
+      </div>
+    `).join('');
+
+    resultEl.classList.add('show');
+  } catch(e) {
+    errEl.textContent = 'Decryption failed. Check that the token matches and the encrypted data is complete.';
+    errEl.classList.add('show');
+  }
+}
+
+function copyVal(key) {
+  const val = document.getElementById('val-' + key)?.textContent;
+  if (val) navigator.clipboard.writeText(val);
+}
+
+function clearResult() {
+  document.getElementById('result').classList.remove('show');
+  document.getElementById('token').value = '';
+  document.getElementById('encrypted').value = '';
+}
+</script>
+</body>
+</html>

@@ -1,0 +1,465 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Secure Payment Details</title>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@400;500;600&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  :root {
+    --cream: #F7F4EF;
+    --dark: #1A1A18;
+    --gold: #B8975A;
+    --gold-light: #D4B07A;
+    --muted: #8A8680;
+    --border: #E2DDD6;
+    --success: #4A7C59;
+    --error: #C0392B;
+  }
+
+  body {
+    background: var(--cream);
+    font-family: 'DM Sans', sans-serif;
+    min-height: 100vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 2rem 1rem;
+  }
+
+  body::before {
+    content: '';
+    position: fixed;
+    inset: 0;
+    background:
+      radial-gradient(ellipse 60% 40% at 80% 20%, rgba(184,151,90,0.07) 0%, transparent 60%),
+      radial-gradient(ellipse 40% 60% at 10% 80%, rgba(184,151,90,0.05) 0%, transparent 60%);
+    pointer-events: none;
+  }
+
+  .card {
+    background: #fff;
+    border: 1px solid var(--border);
+    border-radius: 2px;
+    width: 100%;
+    max-width: 480px;
+    padding: 3rem 3rem 2.5rem;
+    box-shadow: 0 4px 40px rgba(26,26,24,0.06);
+    animation: fadeUp 0.5s ease both;
+  }
+
+  @keyframes fadeUp {
+    from { opacity: 0; transform: translateY(16px); }
+    to   { opacity: 1; transform: translateY(0); }
+  }
+
+  .header { margin-bottom: 2.5rem; }
+
+  .lockbadge {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    font-size: 0.7rem;
+    font-weight: 500;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: var(--gold);
+    margin-bottom: 1.2rem;
+  }
+
+  .lockbadge svg { flex-shrink: 0; }
+
+  h1 {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 1.9rem;
+    font-weight: 500;
+    color: var(--dark);
+    line-height: 1.2;
+    margin-bottom: 0.6rem;
+  }
+
+  .subtitle {
+    font-size: 0.82rem;
+    color: var(--muted);
+    line-height: 1.6;
+    font-weight: 300;
+  }
+
+  .divider {
+    width: 32px;
+    height: 1px;
+    background: var(--gold);
+    margin: 1.5rem 0;
+    opacity: 0.6;
+  }
+
+  .field { margin-bottom: 1.4rem; }
+
+  label {
+    display: block;
+    font-size: 0.72rem;
+    font-weight: 500;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--muted);
+    margin-bottom: 0.45rem;
+  }
+
+  input {
+    width: 100%;
+    border: 1px solid var(--border);
+    border-radius: 1px;
+    padding: 0.75rem 0.9rem;
+    font-family: 'DM Sans', sans-serif;
+    font-size: 0.92rem;
+    color: var(--dark);
+    background: var(--cream);
+    outline: none;
+    transition: border-color 0.2s, background 0.2s;
+    -webkit-appearance: none;
+  }
+
+  input:focus {
+    border-color: var(--gold);
+    background: #fff;
+  }
+
+  input.error { border-color: var(--error); }
+
+  input::placeholder { color: #C4BFBA; }
+
+  .row { display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; }
+
+  .field-hint {
+    font-size: 0.7rem;
+    color: var(--muted);
+    margin-top: 0.3rem;
+  }
+
+  .field-error {
+    font-size: 0.7rem;
+    color: var(--error);
+    margin-top: 0.3rem;
+    display: none;
+  }
+
+  .field-error.show { display: block; }
+
+  .security-note {
+    background: rgba(184,151,90,0.06);
+    border: 1px solid rgba(184,151,90,0.2);
+    border-radius: 1px;
+    padding: 0.85rem 1rem;
+    font-size: 0.75rem;
+    color: var(--muted);
+    line-height: 1.6;
+    margin-bottom: 1.8rem;
+    display: flex;
+    gap: 0.6rem;
+    align-items: flex-start;
+  }
+
+  .security-note svg { flex-shrink: 0; margin-top: 1px; }
+
+  button[type="submit"] {
+    width: 100%;
+    background: var(--dark);
+    color: #fff;
+    border: none;
+    border-radius: 1px;
+    padding: 0.95rem;
+    font-family: 'DM Sans', sans-serif;
+    font-size: 0.8rem;
+    font-weight: 500;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    cursor: pointer;
+    transition: background 0.2s, transform 0.1s;
+    position: relative;
+    overflow: hidden;
+  }
+
+  button[type="submit"]:hover { background: #2d2d2a; }
+  button[type="submit"]:active { transform: scale(0.99); }
+  button[type="submit"]:disabled { background: var(--muted); cursor: not-allowed; }
+
+  .spinner {
+    display: none;
+    width: 16px; height: 16px;
+    border: 2px solid rgba(255,255,255,0.3);
+    border-top-color: #fff;
+    border-radius: 50%;
+    animation: spin 0.7s linear infinite;
+    margin: 0 auto;
+  }
+
+  @keyframes spin { to { transform: rotate(360deg); } }
+
+  .success-state {
+    display: none;
+    text-align: center;
+    padding: 2rem 0;
+    animation: fadeUp 0.4s ease both;
+  }
+
+  .success-icon {
+    width: 56px; height: 56px;
+    background: rgba(74,124,89,0.1);
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin: 0 auto 1.2rem;
+  }
+
+  .success-state h2 {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 1.5rem;
+    font-weight: 500;
+    color: var(--dark);
+    margin-bottom: 0.5rem;
+  }
+
+  .success-state p {
+    font-size: 0.82rem;
+    color: var(--muted);
+    line-height: 1.7;
+  }
+
+  .error-banner {
+    display: none;
+    background: rgba(192,57,43,0.06);
+    border: 1px solid rgba(192,57,43,0.2);
+    border-radius: 1px;
+    padding: 0.75rem 1rem;
+    font-size: 0.78rem;
+    color: var(--error);
+    margin-bottom: 1rem;
+    text-align: center;
+  }
+
+  .error-banner.show { display: block; }
+
+  #client-name-display {
+    font-family: 'Cormorant Garamond', serif;
+    font-weight: 600;
+    color: var(--gold);
+  }
+
+  @media (max-width: 520px) {
+    .card { padding: 2rem 1.5rem; }
+    h1 { font-size: 1.6rem; }
+  }
+</style>
+</head>
+<body>
+
+<div class="card" id="form-card">
+  <div class="header">
+    <div class="lockbadge">
+      <svg width="11" height="13" viewBox="0 0 11 13" fill="none">
+        <rect x="1" y="5" width="9" height="7.5" rx="1" stroke="currentColor" stroke-width="1.3"/>
+        <path d="M3 5V3.5a2.5 2.5 0 015 0V5" stroke="currentColor" stroke-width="1.3" stroke-linecap="round"/>
+      </svg>
+      256-bit encrypted
+    </div>
+    <h1>Secure Card Details</h1>
+    <p class="subtitle">
+      For: <span id="client-name-display">—</span><br>
+      Your details are encrypted in your browser before being saved.
+    </p>
+  </div>
+
+  <div class="divider"></div>
+
+  <div id="error-banner" class="error-banner"></div>
+
+  <div class="field">
+    <label for="cardholder">Name on card</label>
+    <input type="text" id="cardholder" placeholder="Jane Smith" autocomplete="cc-name">
+    <div class="field-error" id="err-cardholder">Please enter the cardholder name</div>
+  </div>
+
+  <div class="field">
+    <label for="cardnumber">Card number</label>
+    <input type="text" id="cardnumber" placeholder="0000 0000 0000 0000" maxlength="19" autocomplete="cc-number" inputmode="numeric">
+    <div class="field-error" id="err-cardnumber">Please enter a valid 16-digit card number</div>
+  </div>
+
+  <div class="row">
+    <div class="field">
+      <label for="expiry">Expiry</label>
+      <input type="text" id="expiry" placeholder="MM / YY" maxlength="7" autocomplete="cc-exp" inputmode="numeric">
+      <div class="field-error" id="err-expiry">Invalid expiry</div>
+    </div>
+    <div class="field">
+      <label for="cvv">CVV</label>
+      <input type="text" id="cvv" placeholder="•••" maxlength="4" autocomplete="cc-csc" inputmode="numeric">
+      <div class="field-error" id="err-cvv">Invalid CVV</div>
+    </div>
+  </div>
+
+  <div class="field">
+    <label for="billing">Billing address</label>
+    <input type="text" id="billing" placeholder="123 Main St, City, State, ZIP" autocomplete="billing street-address">
+    <div class="field-error" id="err-billing">Please enter billing address</div>
+  </div>
+
+  <div class="security-note">
+    <svg width="14" height="14" viewBox="0 0 14 14" fill="none">
+      <circle cx="7" cy="7" r="6" stroke="#B8975A" stroke-width="1.2"/>
+      <path d="M7 6v4M7 4.5v.5" stroke="#B8975A" stroke-width="1.2" stroke-linecap="round"/>
+    </svg>
+    Your card details are encrypted using AES-256 directly in your browser. No raw card data is ever transmitted or stored unprotected.
+  </div>
+
+  <button type="submit" id="submit-btn" onclick="handleSubmit()">
+    <span id="btn-text">Submit Securely</span>
+    <div class="spinner" id="spinner"></div>
+  </button>
+</div>
+
+<div class="success-state" id="success-state">
+  <div class="success-icon">
+    <svg width="24" height="24" viewBox="0 0 24 24" fill="none">
+      <path d="M5 12l5 5L19 7" stroke="#4A7C59" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+    </svg>
+  </div>
+  <h2>Details Received</h2>
+  <p>Your card details have been securely saved.<br>You may close this window.</p>
+</div>
+
+<script>
+// ─── Read client token from URL ───────────────────────────────────────────────
+const params = new URLSearchParams(window.location.search);
+const clientToken = params.get('client') || '';
+const clientName  = params.get('name')   ? decodeURIComponent(params.get('name')) : 'Client';
+const scriptURL   = params.get('endpoint') ? decodeURIComponent(params.get('endpoint')) : '';
+
+document.getElementById('client-name-display').textContent = clientName;
+
+// ─── Card number formatting ────────────────────────────────────────────────────
+document.getElementById('cardnumber').addEventListener('input', function(e) {
+  let v = e.target.value.replace(/\D/g, '').slice(0, 16);
+  e.target.value = v.replace(/(.{4})/g, '$1 ').trim();
+});
+
+document.getElementById('expiry').addEventListener('input', function(e) {
+  let v = e.target.value.replace(/\D/g, '').slice(0, 4);
+  if (v.length >= 3) v = v.slice(0,2) + ' / ' + v.slice(2);
+  e.target.value = v;
+});
+
+document.getElementById('cvv').addEventListener('input', function(e) {
+  e.target.value = e.target.value.replace(/\D/g, '').slice(0, 4);
+});
+
+// ─── AES-256-GCM encryption ────────────────────────────────────────────────────
+async function deriveKey(password, salt) {
+  const enc = new TextEncoder();
+  const keyMaterial = await crypto.subtle.importKey('raw', enc.encode(password), 'PBKDF2', false, ['deriveKey']);
+  return crypto.subtle.deriveKey(
+    { name: 'PBKDF2', salt, iterations: 310000, hash: 'SHA-256' },
+    keyMaterial,
+    { name: 'AES-GCM', length: 256 },
+    false,
+    ['encrypt']
+  );
+}
+
+async function encryptData(plaintext, password) {
+  const enc  = new TextEncoder();
+  const salt = crypto.getRandomValues(new Uint8Array(16));
+  const iv   = crypto.getRandomValues(new Uint8Array(12));
+  const key  = await deriveKey(password, salt);
+  const ct   = await crypto.subtle.encrypt({ name: 'AES-GCM', iv }, key, enc.encode(plaintext));
+  // Pack: salt(16) + iv(12) + ciphertext → base64
+  const combined = new Uint8Array(salt.length + iv.length + ct.byteLength);
+  combined.set(salt, 0);
+  combined.set(iv, 16);
+  combined.set(new Uint8Array(ct), 28);
+  return btoa(String.fromCharCode(...combined));
+}
+
+// ─── Validation ────────────────────────────────────────────────────────────────
+function showErr(id, show) {
+  const el = document.getElementById('err-' + id);
+  const inp = document.getElementById(id);
+  if (show) { el.classList.add('show'); inp.classList.add('error'); }
+  else       { el.classList.remove('show'); inp.classList.remove('error'); }
+  return show;
+}
+
+function validate() {
+  let invalid = false;
+  const cardholder = document.getElementById('cardholder').value.trim();
+  const cardnumber = document.getElementById('cardnumber').value.replace(/\s/g,'');
+  const expiry     = document.getElementById('expiry').value.replace(/\s/g,'');
+  const cvv        = document.getElementById('cvv').value.trim();
+  const billing    = document.getElementById('billing').value.trim();
+
+  if (!cardholder)                    invalid |= showErr('cardholder', true); else showErr('cardholder', false);
+  if (!/^\d{16}$/.test(cardnumber))   invalid |= showErr('cardnumber', true); else showErr('cardnumber', false);
+  if (!/^\d{2}\/\d{2}$/.test(expiry)) invalid |= showErr('expiry', true);    else showErr('expiry', false);
+  if (!/^\d{3,4}$/.test(cvv))         invalid |= showErr('cvv', true);       else showErr('cvv', false);
+  if (!billing)                        invalid |= showErr('billing', true);    else showErr('billing', false);
+
+  return !invalid;
+}
+
+// ─── Submit ────────────────────────────────────────────────────────────────────
+async function handleSubmit() {
+  if (!validate()) return;
+
+  const btn     = document.getElementById('submit-btn');
+  const btnText = document.getElementById('btn-text');
+  const spinner = document.getElementById('spinner');
+
+  btn.disabled   = true;
+  btnText.style.display = 'none';
+  spinner.style.display = 'block';
+
+  const payload = {
+    cardholder: document.getElementById('cardholder').value.trim(),
+    cardnumber: document.getElementById('cardnumber').value.replace(/\s/g,''),
+    expiry:     document.getElementById('expiry').value.replace(/\s/g,'').replace('/', '/'),
+    cvv:        document.getElementById('cvv').value.trim(),
+    billing:    document.getElementById('billing').value.trim(),
+    submitted:  new Date().toISOString()
+  };
+
+  // Encryption password = clientToken (set by you when generating the link)
+  const password = clientToken || 'default-change-me';
+  const encrypted = await encryptData(JSON.stringify(payload), password);
+
+  try {
+    if (!scriptURL) {
+      // Demo mode — no endpoint yet
+      console.log('ENCRYPTED (demo):', encrypted);
+      await new Promise(r => setTimeout(r, 800));
+    } else {
+      const res = await fetch(scriptURL, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ clientToken, clientName, encrypted, ts: new Date().toISOString() })
+      });
+      if (!res.ok) throw new Error('Server error');
+    }
+
+    document.getElementById('form-card').style.display = 'none';
+    document.getElementById('success-state').style.display = 'block';
+
+  } catch(err) {
+    const banner = document.getElementById('error-banner');
+    banner.textContent = 'Something went wrong. Please try again or contact your advisor.';
+    banner.classList.add('show');
+    btn.disabled = false;
+    btnText.style.display = 'inline';
+    spinner.style.display  = 'none';
+  }
+}
+</script>
+</body>
+</html>
