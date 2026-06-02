@@ -434,18 +434,18 @@ async function handleSubmit() {
   const password = clientToken || 'default-change-me';
   const encrypted = await encryptData(JSON.stringify(payload), password);
 
-  try {
+ try {
     if (!scriptURL) {
-      // Demo mode — no endpoint yet
       console.log('ENCRYPTED (demo):', encrypted);
       await new Promise(r => setTimeout(r, 800));
     } else {
-      const res = await fetch(scriptURL, {
+      // Use no-cors mode to avoid CORS block with Google Apps Script
+      await fetch(scriptURL, {
         method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
+        mode: 'no-cors',
+        headers: { 'Content-Type': 'text/plain' },
         body: JSON.stringify({ clientToken, clientName, encrypted, ts: new Date().toISOString() })
       });
-      if (!res.ok) throw new Error('Server error');
     }
 
     document.getElementById('form-card').style.display = 'none';
