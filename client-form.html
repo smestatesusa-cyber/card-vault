@@ -284,11 +284,11 @@ async function handleSubmit() {
     email:           v('email'),
     llcName:         v('llc-name'),
     businessAddress: v('business-address'),
-    fico:            v('fico'),
-    borrowerName:    v('borrower-name'),
-    titleHolding:    document.getElementById('title-holding').value,
-    experience:      document.getElementById('experience').value,
-    citizenship:     document.getElementById('citizenship').value,
+    fico:            v('fico')            || '',
+borrowerName:    v('borrower-name')   || '',
+titleHolding:    document.getElementById('title-holding').value || '',
+experience:      document.getElementById('experience').value    || '',
+citizenship:     document.getElementById('citizenship').value   || '',
   };
 
   // Masked previews (stored in sheet as readable hints)
