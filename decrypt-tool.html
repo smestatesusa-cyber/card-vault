@@ -67,8 +67,6 @@
     margin-bottom: 1.2rem;
   }
 
-  .lockbadge svg { flex-shrink: 0; }
-
   h1 {
     font-family: 'Cormorant Garamond', serif;
     font-size: 1.9rem;
@@ -131,7 +129,38 @@
     background: #fff;
   }
 
+  input.error { border-color: var(--error); }
   input::placeholder, textarea::placeholder { color: #C4BFBA; }
+
+  /* PIN input — 4 big boxes */
+  .pin-row {
+    display: flex;
+    gap: 0.75rem;
+    justify-content: flex-start;
+  }
+
+  .pin-box {
+    width: 56px;
+    height: 60px;
+    border: 1px solid var(--border);
+    border-radius: 1px;
+    background: var(--cream);
+    font-size: 1.5rem;
+    font-weight: 500;
+    color: var(--dark);
+    text-align: center;
+    outline: none;
+    transition: border-color 0.2s, background 0.2s;
+    -webkit-appearance: none;
+    caret-color: transparent;
+  }
+
+  .pin-box:focus {
+    border-color: var(--gold);
+    background: #fff;
+  }
+
+  .pin-box.error { border-color: var(--error); }
 
   .warning {
     background: rgba(184,151,90,0.06);
@@ -163,6 +192,7 @@
     text-transform: uppercase;
     cursor: pointer;
     transition: background 0.2s;
+    margin-top: 0.4rem;
   }
 
   button[type="submit"]:hover { background: #2d2d2a; }
@@ -181,7 +211,6 @@
 
   .error-msg.show { display: block; }
 
-  /* Results */
   .result {
     margin-top: 2rem;
     border: 1px solid var(--border);
@@ -270,6 +299,7 @@
   @media (max-width: 520px) {
     .card { padding: 2rem 1.5rem; }
     h1 { font-size: 1.6rem; }
+    .pin-box { width: 48px; height: 54px; }
   }
 </style>
 </head>
@@ -285,7 +315,7 @@
   </div>
 
   <h1>View Card Details</h1>
-  <p class="subtitle">Enter the client token and paste the encrypted data from their Google Sheet to decrypt.</p>
+  <p class="subtitle">Enter your 4-digit PIN and paste the encrypted data from the client's Google Sheet.</p>
 
   <div class="divider"></div>
 
@@ -298,8 +328,13 @@
   </div>
 
   <div class="field">
-    <label for="token">Client Token</label>
-    <input type="password" id="token" placeholder="Paste client token here">
+    <label>Your PIN</label>
+    <div class="pin-row">
+      <input class="pin-box" id="pin0" type="password" maxlength="1" inputmode="numeric" pattern="[0-9]">
+      <input class="pin-box" id="pin1" type="password" maxlength="1" inputmode="numeric" pattern="[0-9]">
+      <input class="pin-box" id="pin2" type="password" maxlength="1" inputmode="numeric" pattern="[0-9]">
+      <input class="pin-box" id="pin3" type="password" maxlength="1" inputmode="numeric" pattern="[0-9]">
+    </div>
   </div>
 
   <div class="field">
@@ -307,9 +342,7 @@
     <textarea id="encrypted" placeholder="Paste encrypted string from Google Sheet..."></textarea>
   </div>
 
-  <div id="error-msg" class="error-msg">
-    Decryption failed. Check that the token is correct and the encrypted data is complete.
-  </div>
+  <div id="error-msg" class="error-msg"></div>
 
   <button type="submit" onclick="decrypt()">Decrypt Card Details</button>
 
@@ -323,11 +356,31 @@
 </div>
 
 <script>
-// Read URL params (pre-filled when opened from sheet menu)
+// Read URL params — encrypted data pre-filled when opened from sheet menu
 const params = new URLSearchParams(window.location.search);
-if (params.get('token'))  document.getElementById('token').value     = decodeURIComponent(params.get('token'));
-if (params.get('data'))   document.getElementById('encrypted').value = decodeURIComponent(params.get('data'));
+if (params.get('data')) document.getElementById('encrypted').value = decodeURIComponent(params.get('data'));
+// clientToken is passed via URL so we can combine PIN+token for decryption
+const clientToken = params.get('token') ? decodeURIComponent(params.get('token')) : '';
 
+// ─── PIN box auto-advance ──────────────────────────────────────────────────────
+document.querySelectorAll('.pin-box').forEach((box, i, boxes) => {
+  box.addEventListener('input', function() {
+    this.value = this.value.replace(/\D/g, '').slice(-1);
+    if (this.value && i < boxes.length - 1) boxes[i + 1].focus();
+  });
+  box.addEventListener('keydown', function(e) {
+    if (e.key === 'Backspace' && !this.value && i > 0) boxes[i - 1].focus();
+    if (e.key === 'Enter') decrypt();
+  });
+  box.addEventListener('paste', function(e) {
+    e.preventDefault();
+    const pasted = (e.clipboardData || window.clipboardData).getData('text').replace(/\D/g, '').slice(0, 4);
+    [...pasted].forEach((ch, j) => { if (boxes[j]) boxes[j].value = ch; });
+    if (boxes[pasted.length - 1]) boxes[Math.min(pasted.length, 3)].focus();
+  });
+});
+
+// ─── Decryption ────────────────────────────────────────────────────────────────
 async function deriveKey(password, salt) {
   const enc = new TextEncoder();
   const keyMaterial = await crypto.subtle.importKey('raw', enc.encode(password), 'PBKDF2', false, ['deriveKey']);
@@ -351,22 +404,33 @@ async function decryptData(b64, password) {
 }
 
 async function decrypt() {
-  const token     = document.getElementById('token').value.trim();
+  const pin = ['pin0','pin1','pin2','pin3'].map(id => document.getElementById(id).value).join('');
   const encrypted = document.getElementById('encrypted').value.trim();
   const errEl     = document.getElementById('error-msg');
   const resultEl  = document.getElementById('result');
 
   errEl.classList.remove('show');
   resultEl.classList.remove('show');
+  document.querySelectorAll('.pin-box').forEach(b => b.classList.remove('error'));
 
-  if (!token || !encrypted) {
-    errEl.textContent = 'Please enter both the token and encrypted data.';
+  if (pin.length < 4) {
+    errEl.textContent = 'Please enter your 4-digit PIN.';
+    errEl.classList.add('show');
+    document.querySelectorAll('.pin-box').forEach(b => b.classList.add('error'));
+    return;
+  }
+
+  if (!encrypted) {
+    errEl.textContent = 'Please paste the encrypted data from the Google Sheet.';
     errEl.classList.add('show');
     return;
   }
 
+  // Password = PIN + clientToken (same combination used during encryption)
+  const password = pin + clientToken;
+
   try {
-    const json = await decryptData(encrypted, token);
+    const json = await decryptData(encrypted, password);
     const data = JSON.parse(json);
 
     const fields = [
@@ -375,6 +439,7 @@ async function decrypt() {
       { label: 'Expiry',       key: 'expiry' },
       { label: 'CVV',          key: 'cvv' },
       { label: 'Billing Addr', key: 'billing' },
+      { label: 'SSN',          key: 'ssn' },
       { label: 'Submitted',    key: 'submitted' },
     ];
 
@@ -393,9 +458,12 @@ async function decrypt() {
     `).join('');
 
     resultEl.classList.add('show');
+
   } catch(e) {
-    errEl.textContent = 'Decryption failed. Check that the token is correct and the encrypted data is complete.';
+    errEl.textContent = 'Incorrect PIN or data. Please check and try again.';
     errEl.classList.add('show');
+    document.querySelectorAll('.pin-box').forEach(b => b.classList.add('error'));
+    document.getElementById('pin0').focus();
   }
 }
 
@@ -410,9 +478,10 @@ function copyVal(key) {
 
 function clearResult() {
   document.getElementById('result').classList.remove('show');
-  document.getElementById('token').value = '';
   document.getElementById('encrypted').value = '';
   document.getElementById('error-msg').classList.remove('show');
+  document.querySelectorAll('.pin-box').forEach(b => { b.value = ''; b.classList.remove('error'); });
+  document.getElementById('pin0').focus();
 }
 </script>
 </body>
